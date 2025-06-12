@@ -18,18 +18,20 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    @Transactional // Ensures the entire method runs in a single database transaction
+    @Transactional
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        // Note: We will need to enhance this soon to handle updates vs. creates.
+        // For now, it only handles creation.
         Customer customer = new Customer();
         customer.setFirstName(customerDTO.getFirstName());
         customer.setLastName(customerDTO.getLastName());
-        // In a real scenario, you'd also map addresses and preferences.
+        // In a real scenario, you'd also map addresses and preferences from the DTO.
 
         Customer savedCustomer = customerRepository.save(customer);
 
-        // We should return a DTO, not the entity.
-        customerDTO.setId(savedCustomer.getId());
-        return customerDTO;
+        // SOLUTION: Convert the fully-populated 'savedCustomer' entity back to a new DTO.
+        // This new DTO will have the ID, timestamps, and any other server-generated data.
+        return convertToDTO(savedCustomer);
     }
 
     @Override
