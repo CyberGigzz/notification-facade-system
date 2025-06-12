@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle='Edit Customer')}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <!-- Use th:text to dynamically show which customer is being edited -->
+    <h2>Edit Customer: <span th:text="${customer.firstName + ' ' + customer.lastName}">Customer Name</span></h2>
+
+    <form th:action="@{/admin/customers/{id}(id=${customer.id})}" th:object="${customer}" method="post">
+        <!-- We don't need to show the ID, but it's part of the object -->
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+        </div>
+        
+        <button type="submit" class="btn btn-success">Update Customer</button>
+        <a th:href="@{/admin/customers}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

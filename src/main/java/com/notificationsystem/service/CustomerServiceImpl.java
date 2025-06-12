@@ -1,7 +1,11 @@
 package com.notificationsystem.service;
 
+import com.notificationsystem.domain.Address;
 import com.notificationsystem.domain.Customer;
+import com.notificationsystem.domain.Preference;
+import com.notificationsystem.dto.AddressDTO;
 import com.notificationsystem.dto.CustomerDTO;
+import com.notificationsystem.dto.PreferenceDTO;
 import com.notificationsystem.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,28 +21,34 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    @Override
-    @Transactional
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-        // Note: We will need to enhance this soon to handle updates vs. creates.
-        // For now, it only handles creation.
-        Customer customer = new Customer();
-        customer.setFirstName(customerDTO.getFirstName());
-        customer.setLastName(customerDTO.getLastName());
-        // In a real scenario, you'd also map addresses and preferences from the DTO.
+@Override
+@Transactional
+public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+    if (customerDTO.getId() != null) {
+        Customer existingCustomer = customerRepository.findById(customerDTO.getId())
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                        "Customer not found with id: " + customerDTO.getId()));
 
-        Customer savedCustomer = customerRepository.save(customer);
+        existingCustomer.setFirstName(customerDTO.getFirstName());
+        existingCustomer.setLastName(customerDTO.getLastName());
 
-        // SOLUTION: Convert the fully-populated 'savedCustomer' entity back to a new DTO.
-        // This new DTO will have the ID, timestamps, and any other server-generated data.
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+        return convertToDTO(updatedCustomer);
+
+    } else {
+        Customer newCustomer = new Customer();
+        newCustomer.setFirstName(customerDTO.getFirstName());
+        newCustomer.setLastName(customerDTO.getLastName());
+        Customer savedCustomer = customerRepository.save(newCustomer);
         return convertToDTO(savedCustomer);
     }
+}
 
     @Override
-    @Transactional(readOnly = true) // A read-only transaction is more efficient for find operations
+    @Transactional(readOnly = true) 
     public List<CustomerDTO> findAllCustomers() {
         return customerRepository.findAll().stream()
-                .map(this::convertToDTO) // Convert each customer entity to a DTO
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -55,8 +65,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
     }
 
-    // Helper method to convert an Entity to a DTO
-    // In a real project, you might use a library like MapStruct for this.
     private CustomerDTO convertToDTO(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
         dto.setId(customer.getId());
@@ -64,8 +72,35 @@ public class CustomerServiceImpl implements CustomerService {
         dto.setLastName(customer.getLastName());
         dto.setCreatedAt(customer.getCreatedAt());
         dto.setUpdatedAt(customer.getUpdatedAt());
-        // Note: For simplicity, we are not mapping the lists of addresses/preferences yet.
-        // We will add this complexity later when we build the full update/create logic.
+
+        if (customer.getAddresses() != null) {
+            dto.setAddresses(customer.getAddresses().stream()
+                    .map(this::convertAddressToDTO)
+                    .collect(Collectors.toList()));
+        }
+
+        if (customer.getPreferences() != null) {
+            dto.setPreferences(customer.getPreferences().stream()
+                    .map(this::convertPreferenceToDTO)
+                    .collect(Collectors.toList()));
+        }
+        return dto;
+    }
+
+    private AddressDTO convertAddressToDTO(Address address) {
+        AddressDTO dto = new AddressDTO();
+        dto.setId(address.getId());
+        dto.setAddressType(address.getAddressType());
+        dto.setValue(address.getValue());
+        return dto;
+    }
+
+    // New helper method for Preference
+    private PreferenceDTO convertPreferenceToDTO(Preference preference) {
+        PreferenceDTO dto = new PreferenceDTO();
+        dto.setId(preference.getId());
+        dto.setNotificationType(preference.getNotificationType());
+        dto.setOptedIn(preference.isOptedIn());
         return dto;
     }
 }

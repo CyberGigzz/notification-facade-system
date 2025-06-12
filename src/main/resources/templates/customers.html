@@ -11,7 +11,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Customer List</h1>
         <!-- We will make this button work later -->
-        <a href="#" class="btn btn-primary">Add New Customer</a>
+        <a th:href="@{/admin/customers/new}" class="btn btn-primary">Add New Customer</a>
     </div>
 
     <!-- Apply Bootstrap table classes for styling -->
@@ -33,10 +33,16 @@
                 <!-- Format the timestamp for better readability -->
                 <td th:text="${#temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm')}">2023-10-27 10:30</td>
                 <td>
-                    <!-- These buttons are placeholders for now -->
-                    <a href="#" class="btn btn-sm btn-info">View</a>
-                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                    <!-- These buttons are placeholders for now -->                
+                    <a th:href="@{/admin/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-info">View</a>
+                    <a th:href="@{/admin/customers/{id}/edit(id=${customer.id})}" class="btn btn-sm btn-warning">Edit</a>
+                    <!-- DELETE FORM -->
+                    <form th:action="@{/admin/customers/{id}/delete(id=${customer.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this customer?')">
+                            Delete
+                        </button>
+                    </form>
                 </td>
             </tr>
         </tbody>
