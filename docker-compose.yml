@@ -1,0 +1,31 @@
+services:
+  notification_db:
+    image: postgres:16-alpine
+    container_name: notification_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    networks:
+      - notification-network
+
+  notification_pgadmin:
+    image: dpage/pgadmin4:9.4
+    container_name: notification_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - notification_db
+    networks:
+      - notification-network
+
+networks:
+  notification-network:
+    driver: bridge
