@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- This replaces the <head> tag with the 'header' fragment from layout.html -->
+    <!-- We pass our specific page title as a parameter -->
+    <div th:replace="~{layout :: header(pageTitle='Customer Management')}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Customer List</h1>
+        <!-- We will make this button work later -->
+        <a href="#" class="btn btn-primary">Add New Customer</a>
+    </div>
+
+    <!-- Apply Bootstrap table classes for styling -->
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.id}">1</td>
+                <td th:text="${customer.firstName}">Jane</td>
+                <td th:text="${customer.lastName}">Doe</td>
+                <!-- Format the timestamp for better readability -->
+                <td th:text="${#temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm')}">2023-10-27 10:30</td>
+                <td>
+                    <!-- These buttons are placeholders for now -->
+                    <a href="#" class="btn btn-sm btn-info">View</a>
+                    <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- This replaces the <footer> tag with the 'footer' fragment from layout.html -->
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

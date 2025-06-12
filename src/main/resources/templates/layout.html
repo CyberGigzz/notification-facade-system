@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The th:text will be replaced by the title of the specific page -->
+    <title th:text="${pageTitle}">Layout</title>
+    <!-- Link to our Bootstrap CSS file -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+
+<!-- This is a placeholder for the main content of each page -->
+<div th:fragment="content">
+    <p>Page content goes here</p>
+</div>
+
+<!-- This footer fragment includes the Bootstrap JS -->
+<footer th:fragment="footer" class="text-center mt-4">
+    <p>© 2025 Notification Facade System</p>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</footer>
+
+</body>
+</html>
