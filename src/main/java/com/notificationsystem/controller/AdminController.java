@@ -100,4 +100,11 @@ public class AdminController {
         
         return "redirect:/admin/customers/" + customerId;
     }
+
+    @PostMapping("/customers/{customerId}/addresses/{addressId}/delete")
+    public String deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId) {
+        customerService.deleteAddress(addressId);
+        
+        return "redirect:/admin/customers/" + customerId;
+    }
 }

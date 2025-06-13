@@ -21,10 +21,9 @@
     </div>
 
     <!-- Addresses Section -->
-    <div class="card mt-4">                
+    <div class="card mt-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Addresses</h4>
-            <!-- This button links to the 'add address' form, passing the current customer's ID -->
             <a th:href="@{/admin/customers/{id}/addresses/new(id=${customer.id})}" class="btn btn-primary btn-sm">
                 Add New Address
             </a>
@@ -35,12 +34,23 @@
                     <tr>
                         <th>Type</th>
                         <th>Value</th>
+                        <th>Actions</th> <!-- NEW: Actions column header -->
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Note the th:each variable name is 'address' -->
                     <tr th:each="address : ${customer.addresses}">
                         <td th:text="${address.addressType}">EMAIL</td>
                         <td th:text="${address.value}">jane.doe@example.com</td>
+                        <td> <!-- NEW: Actions column data -->
+                            <form th:action="@{/admin/customers/{customerId}/addresses/{addressId}/delete(customerId=${customer.id}, addressId=${address.id})}" 
+                                method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this address?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

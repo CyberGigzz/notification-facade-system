@@ -6,6 +6,7 @@ import com.notificationsystem.domain.Preference;
 import com.notificationsystem.dto.AddressDTO;
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.dto.PreferenceDTO;
+import com.notificationsystem.repository.AddressRepository;
 import com.notificationsystem.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final AddressRepository addressRepository;
 
     @Override
     @Transactional
@@ -117,5 +119,12 @@ public class CustomerServiceImpl implements CustomerService {
         customer.getAddresses().add(newAddress);
 
         customerRepository.save(customer);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAddress(Long addressId) {
+        // The repository provides a direct and efficient way to delete by ID.
+        addressRepository.deleteById(addressId);
     }
 }
