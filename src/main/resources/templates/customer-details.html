@@ -62,9 +62,12 @@
     </div>
 
     <!-- Preferences Section -->
-    <div class="card mt-4">
-        <div class="card-header">
+    <div class="card mt-4">              
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Notification Preferences</h4>
+            <a th:href="@{/admin/customers/{id}/preferences/new(id=${customer.id})}" class="btn btn-primary btn-sm">
+                Add New Preference
+            </a>
         </div>
         <div class="card-body">
             <table class="table table-hover">

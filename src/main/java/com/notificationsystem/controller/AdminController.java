@@ -1,8 +1,10 @@
 package com.notificationsystem.controller;
 
 import com.notificationsystem.domain.enums.AddressType;
+import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.dto.AddressDTO;
 import com.notificationsystem.dto.CustomerDTO;
+import com.notificationsystem.dto.PreferenceDTO;
 import com.notificationsystem.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -127,6 +129,25 @@ public class AdminController {
                                 @PathVariable Long addressId,
                                 @ModelAttribute("address") AddressDTO addressDTO) {    
         customerService.updateAddress(addressId, addressDTO);
+        
+        return "redirect:/admin/customers/" + customerId;
+    }
+
+    @GetMapping("/customers/{customerId}/preferences/new")
+    public String showAddPreferenceForm(@PathVariable Long customerId, Model model) {
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("preference", new PreferenceDTO());
+        // We pass all possible NotificationType values for a dropdown.
+        model.addAttribute("notificationTypes", NotificationType.values());
+        
+        return "add-preference";
+    }
+
+    @PostMapping("/customers/{customerId}/preferences")
+    public String savePreference(@PathVariable Long customerId,
+                                @ModelAttribute("preference") PreferenceDTO preferenceDTO) {
+                                    
+        customerService.addPreferenceToCustomer(customerId, preferenceDTO);
         
         return "redirect:/admin/customers/" + customerId;
     }

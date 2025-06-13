@@ -8,6 +8,7 @@ import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.dto.PreferenceDTO;
 import com.notificationsystem.repository.AddressRepository;
 import com.notificationsystem.repository.CustomerRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,5 +146,25 @@ public class CustomerServiceImpl implements CustomerService {
         existingAddress.setValue(addressDTO.getValue());
 
         addressRepository.save(existingAddress);
+    }
+
+    @Override
+    @Transactional
+    public void addPreferenceToCustomer(Long customerId, PreferenceDTO preferenceDTO) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                        "Customer not found with id: " + customerId));
+
+        Preference newPreference = new Preference();
+        newPreference.setNotificationType(preferenceDTO.getNotificationType());
+        newPreference.setOptedIn(preferenceDTO.isOptedIn());
+        
+        // Set the relationship
+        newPreference.setCustomer(customer);
+        
+        customer.getPreferences().add(newPreference);
+
+        // Saving the parent will cascade and save the new preference
+        customerRepository.save(customer);
     }
 }
