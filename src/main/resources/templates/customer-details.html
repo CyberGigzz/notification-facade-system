@@ -41,8 +41,12 @@
                     <!-- Note the th:each variable name is 'address' -->
                     <tr th:each="address : ${customer.addresses}">
                         <td th:text="${address.addressType}">EMAIL</td>
-                        <td th:text="${address.value}">jane.doe@example.com</td>
-                        <td> <!-- NEW: Actions column data -->
+                        <td th:text="${address.value}">jane.doe@example.com</td>                              
+                        <td> <!-- Actions column data -->
+                            <!-- NEW: Edit button link -->
+                            <a th:href="@{/admin/customers/{customerId}/addresses/{addressId}/edit(customerId=${customer.id}, addressId=${address.id})}" 
+                            class="btn btn-warning btn-sm">Edit</a>
+
                             <form th:action="@{/admin/customers/{customerId}/addresses/{addressId}/delete(customerId=${customer.id}, addressId=${address.id})}" 
                                 method="post" class="d-inline">
                                 <button type="submit" class="btn btn-danger btn-sm"

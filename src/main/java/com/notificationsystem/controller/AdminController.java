@@ -107,4 +107,27 @@ public class AdminController {
         
         return "redirect:/admin/customers/" + customerId;
     }
+
+    @GetMapping("/customers/{customerId}/addresses/{addressId}/edit")
+    public String showEditAddressForm(@PathVariable Long customerId, 
+                                    @PathVariable Long addressId, Model model) {
+        
+        AddressDTO address = customerService.findAddressById(addressId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid address Id:" + addressId));
+
+        model.addAttribute("address", address);
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("addressTypes", AddressType.values());
+        
+        return "edit-address";
+    }
+
+    @PostMapping("/customers/{customerId}/addresses/{addressId}")
+    public String updateAddress(@PathVariable Long customerId,
+                                @PathVariable Long addressId,
+                                @ModelAttribute("address") AddressDTO addressDTO) {    
+        customerService.updateAddress(addressId, addressDTO);
+        
+        return "redirect:/admin/customers/" + customerId;
+    }
 }

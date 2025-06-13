@@ -124,7 +124,26 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteAddress(Long addressId) {
-        // The repository provides a direct and efficient way to delete by ID.
         addressRepository.deleteById(addressId);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AddressDTO> findAddressById(Long addressId) {
+        return addressRepository.findById(addressId)
+                .map(this::convertAddressToDTO); 
+    }
+
+    @Override
+    @Transactional
+    public void updateAddress(Long addressId, AddressDTO addressDTO) {
+        Address existingAddress = addressRepository.findById(addressId)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                        "Address not found with id: " + addressId));
+        existingAddress.setAddressType(addressDTO.getAddressType());
+        existingAddress.setValue(addressDTO.getValue());
+
+        addressRepository.save(existingAddress);
     }
 }

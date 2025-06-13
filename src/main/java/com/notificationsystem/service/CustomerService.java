@@ -18,4 +18,8 @@ public interface CustomerService {
     void addAddressToCustomer(Long customerId, AddressDTO addressDTO);
 
     void deleteAddress(Long addressId);
+
+    Optional<AddressDTO> findAddressById(Long addressId);
+
+    void updateAddress(Long addressId, AddressDTO addressDTO);
 }

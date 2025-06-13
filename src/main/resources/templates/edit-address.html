@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle='Edit Address')}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Edit Address</h2>
+
+    <!-- The form POSTs to the update URL, which includes both IDs -->
+    <form th:action="@{/admin/customers/{customerId}/addresses/{addressId}(customerId=${customerId}, addressId=${address.id})}" 
+          th:object="${address}" 
+          method="post">
+        
+        <div class="mb-3">
+            <label for="addressType" class="form-label">Address Type</label>
+            <select class="form-select" id="addressType" th:field="*{addressType}">
+                <option th:each="type : ${addressTypes}"
+                        th:value="${type}"
+                        th:text="${type}"></option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="value" class="form-label">Value</label>
+            <input type="text" class="form-control" id="value" th:field="*{value}">
+        </div>
+        
+        <button type="submit" class="btn btn-success">Update Address</button>
+        <a th:href="@{/admin/customers/{id}(id=${customerId})}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>
