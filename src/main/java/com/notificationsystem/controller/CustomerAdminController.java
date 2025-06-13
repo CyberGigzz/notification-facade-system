@@ -34,7 +34,7 @@ public class CustomerAdminController {
     public String showAddCustomerForm(Model model) {
         model.addAttribute("customer", new CustomerDTO());
         
-        return "customers/add-form";
+        return "customers/form";
     }
 
     @PostMapping("")
@@ -67,7 +67,7 @@ public class CustomerAdminController {
 
         model.addAttribute("customer", customer);
 
-        return "customers/edit-form";
+        return "customers/form";
     }
 
     @GetMapping("/{id}")

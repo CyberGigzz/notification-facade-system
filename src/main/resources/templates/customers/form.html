@@ -7,7 +7,9 @@
 <div class="container mt-4">
     <h2 th:text="${customer.id == null ? 'New Customer Details' : 'Edit Customer'}">Form Title</h2>
 
-    <form th:action="@{/admin/customers/{id}(id=${customer.id})}" th:object="${customer}" method="post">
+    <form th:action="${customer.id == null} ? @{/admin/customers} : @{/admin/customers/{id}(id=${customer.id})}" 
+      th:object="${customer}" 
+      method="post">
         
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
