@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{layout :: header(pageTitle='Add New Preference')}"></div>
+    <div th:replace="~{layout :: header(pageTitle='Edit Preference')}"></div>
 </head>
 <body>
 
 <div class="container mt-4">
-    <h2>Add New Preference</h2>
+    <h2>Edit Preference</h2>
 
-    <form th:action="@{/admin/customers/{customerId}/preferences(customerId=${customerId})}" 
+    <form th:action="@{/admin/customers/{customerId}/preferences/{preferenceId}(customerId=${customerId}, preferenceId=${preference.id})}" 
           th:object="${preference}" 
           method="post">
           
         <div class="mb-3">
             <label for="notificationType" class="form-label">Notification Type</label>
-            <select class="form-select" id="notificationType" th:field="*{notificationType}">
-                <option value="">-- Select Type --</option>
+            <select class="form-select" id="notificationType" th:field="*{notificationType}" disabled>
                 <option th:each="type : ${notificationTypes}"
                         th:value="${type}"
                         th:text="${type}"></option>
             </select>
+            <input type="hidden" th:field="*{notificationType}" />
         </div>
         
         <div class="mb-3 form-check">
-            <!-- For booleans, a checkbox is the perfect input type -->
             <input type="checkbox" class="form-check-input" id="isOptedIn" th:field="*{optedIn}">
             <label class="form-check-label" for="isOptedIn">Opt-In to this notification type</label>
         </div>
         
-        <button type="submit" class="btn btn-success">Save Preference</button>
+        <button type="submit" class="btn btn-success">Update Preference</button>
         <a th:href="@{/admin/customers/{id}(id=${customerId})}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
