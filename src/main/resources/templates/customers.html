@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- This replaces the <head> tag with the 'header' fragment from layout.html -->
-    <!-- We pass our specific page title as a parameter -->
     <div th:replace="~{layout :: header(pageTitle='Customer Management')}"></div>
 </head>
 <body>
@@ -10,11 +8,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Customer List</h1>
-        <!-- We will make this button work later -->
         <a th:href="@{/admin/customers/new}" class="btn btn-primary">Add New Customer</a>
     </div>
 
-    <!-- Apply Bootstrap table classes for styling -->
     <table class="table table-striped table-hover">
         <thead class="table-dark">
             <tr>
@@ -30,13 +26,10 @@
                 <td th:text="${customer.id}">1</td>
                 <td th:text="${customer.firstName}">Jane</td>
                 <td th:text="${customer.lastName}">Doe</td>
-                <!-- Format the timestamp for better readability -->
                 <td th:text="${#temporals.format(customer.createdAt, 'yyyy-MM-dd HH:mm')}">2023-10-27 10:30</td>
                 <td>
-                    <!-- These buttons are placeholders for now -->                
                     <a th:href="@{/admin/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-info">View</a>
                     <a th:href="@{/admin/customers/{id}/edit(id=${customer.id})}" class="btn btn-sm btn-warning">Edit</a>
-                    <!-- DELETE FORM -->
                     <form th:action="@{/admin/customers/{id}/delete(id=${customer.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-sm btn-danger"
                                 onclick="return confirm('Are you sure you want to delete this customer?')">
@@ -49,7 +42,6 @@
     </table>
 </div>
 
-<!-- This replaces the <footer> tag with the 'footer' fragment from layout.html -->
 <div th:replace="~{layout :: footer}"></div>
 
 </body>

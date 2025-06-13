@@ -21,28 +21,28 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 
-@Override
-@Transactional
-public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-    if (customerDTO.getId() != null) {
-        Customer existingCustomer = customerRepository.findById(customerDTO.getId())
-                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
-                        "Customer not found with id: " + customerDTO.getId()));
+    @Override
+    @Transactional
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        if (customerDTO.getId() != null) {
+            Customer existingCustomer = customerRepository.findById(customerDTO.getId())
+                    .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                            "Customer not found with id: " + customerDTO.getId()));
 
-        existingCustomer.setFirstName(customerDTO.getFirstName());
-        existingCustomer.setLastName(customerDTO.getLastName());
+            existingCustomer.setFirstName(customerDTO.getFirstName());
+            existingCustomer.setLastName(customerDTO.getLastName());
 
-        Customer updatedCustomer = customerRepository.save(existingCustomer);
-        return convertToDTO(updatedCustomer);
+            Customer updatedCustomer = customerRepository.save(existingCustomer);
+            return convertToDTO(updatedCustomer);
 
-    } else {
-        Customer newCustomer = new Customer();
-        newCustomer.setFirstName(customerDTO.getFirstName());
-        newCustomer.setLastName(customerDTO.getLastName());
-        Customer savedCustomer = customerRepository.save(newCustomer);
-        return convertToDTO(savedCustomer);
+        } else {
+            Customer newCustomer = new Customer();
+            newCustomer.setFirstName(customerDTO.getFirstName());
+            newCustomer.setLastName(customerDTO.getLastName());
+            Customer savedCustomer = customerRepository.save(newCustomer);
+            return convertToDTO(savedCustomer);
+        }
     }
-}
 
     @Override
     @Transactional(readOnly = true) 
@@ -56,7 +56,7 @@ public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
     @Transactional(readOnly = true)
     public Optional<CustomerDTO> findCustomerById(Long id) {
         return customerRepository.findById(id)
-                .map(this::convertToDTO); // If customer exists, convert it to DTO
+                .map(this::convertToDTO); 
     }
 
     @Override
@@ -95,12 +95,27 @@ public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         return dto;
     }
 
-    // New helper method for Preference
     private PreferenceDTO convertPreferenceToDTO(Preference preference) {
         PreferenceDTO dto = new PreferenceDTO();
         dto.setId(preference.getId());
         dto.setNotificationType(preference.getNotificationType());
         dto.setOptedIn(preference.isOptedIn());
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public void addAddressToCustomer(Long customerId, AddressDTO addressDTO) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                        "Customer not found with id: " + customerId));
+
+        Address newAddress = new Address();
+        newAddress.setAddressType(addressDTO.getAddressType());
+        newAddress.setValue(addressDTO.getValue());
+        newAddress.setCustomer(customer);
+        customer.getAddresses().add(newAddress);
+
+        customerRepository.save(customer);
     }
 }

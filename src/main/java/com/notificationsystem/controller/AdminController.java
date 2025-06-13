@@ -1,5 +1,7 @@
 package com.notificationsystem.controller;
 
+import com.notificationsystem.domain.enums.AddressType;
+import com.notificationsystem.dto.AddressDTO;
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -81,5 +83,21 @@ public class AdminController {
 
         // Return the name of our new details template.
         return "customer-details";
+    }
+
+    @GetMapping("/customers/{customerId}/addresses/new")
+    public String showAddAddressForm(@PathVariable Long customerId, Model model) {
+        model.addAttribute("customerId", customerId);        
+        model.addAttribute("address", new AddressDTO());
+        model.addAttribute("addressTypes", AddressType.values());
+        
+        return "add-address";
+    }
+
+    @PostMapping("/customers/{customerId}/addresses")
+    public String saveAddress(@PathVariable Long customerId, @ModelAttribute("address") AddressDTO addressDTO) {
+        customerService.addAddressToCustomer(customerId, addressDTO);
+        
+        return "redirect:/admin/customers/" + customerId;
     }
 }
