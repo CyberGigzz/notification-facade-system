@@ -26,4 +26,10 @@ public interface CustomerService {
     void updateAddress(Long addressId, AddressDTO addressDTO);
 
     void addPreferenceToCustomer(Long customerId, PreferenceDTO preferenceDTO);
+
+    void deletePreference(Long preferenceId);
+
+    Optional<PreferenceDTO> findPreferenceById(Long preferenceId);
+
+    void updatePreference(Long preferenceId, PreferenceDTO preferenceDTO);
 }

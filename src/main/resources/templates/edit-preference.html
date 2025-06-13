@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle='Edit Preference')}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Edit Preference</h2>
+
+    <form th:action="@{/admin/customers/{customerId}/preferences/{preferenceId}(customerId=${customerId}, preferenceId=${preference.id})}" 
+          th:object="${preference}" 
+          method="post">
+          
+        <div class="mb-3">
+            <label for="notificationType" class="form-label">Notification Type</label>
+            <!-- The dropdown will be disabled because you shouldn't change the type of an existing preference -->
+            <select class="form-select" id="notificationType" th:field="*{notificationType}" disabled>
+                <option th:each="type : ${notificationTypes}"
+                        th:value="${type}"
+                        th:text="${type}"></option>
+            </select>
+            <!-- We add a hidden input to ensure the disabled value is still submitted -->
+            <input type="hidden" th:field="*{notificationType}" />
+        </div>
+        
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="isOptedIn" th:field="*{optedIn}">
+            <label class="form-check-label" for="isOptedIn">Opt-In to this notification type</label>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Update Preference</button>
+        <a th:href="@{/admin/customers/{id}(id=${customerId})}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.dto.PreferenceDTO;
 import com.notificationsystem.repository.AddressRepository;
 import com.notificationsystem.repository.CustomerRepository;
+import com.notificationsystem.repository.PreferenceRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
+    private final PreferenceRepository preferenceRepository;
 
     @Override
     @Transactional
@@ -166,5 +168,31 @@ public class CustomerServiceImpl implements CustomerService {
 
         // Saving the parent will cascade and save the new preference
         customerRepository.save(customer);
+    }
+
+
+    @Override
+    @Transactional
+    public void deletePreference(Long preferenceId) {
+        preferenceRepository.deleteById(preferenceId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<PreferenceDTO> findPreferenceById(Long preferenceId) {
+        return preferenceRepository.findById(preferenceId)
+                .map(this::convertPreferenceToDTO);
+    }
+
+    @Override
+    @Transactional
+    public void updatePreference(Long preferenceId, PreferenceDTO preferenceDTO) {
+        Preference existingPreference = preferenceRepository.findById(preferenceId)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                        "Preference not found with id: " + preferenceId));
+
+        existingPreference.setOptedIn(preferenceDTO.isOptedIn());
+
+        preferenceRepository.save(existingPreference);
     }
 }

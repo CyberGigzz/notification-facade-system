@@ -62,7 +62,7 @@
     </div>
 
     <!-- Preferences Section -->
-    <div class="card mt-4">              
+    <div class="card mt-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Notification Preferences</h4>
             <a th:href="@{/admin/customers/{id}/preferences/new(id=${customer.id})}" class="btn btn-primary btn-sm">
@@ -75,6 +75,7 @@
                     <tr>
                         <th>Type</th>
                         <th>Status</th>
+                        <th>Actions</th> <!-- NEW HEADER -->
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +84,18 @@
                         <td>
                             <span th:if="${preference.isOptedIn}" class="badge bg-success">Opted-In</span>
                             <span th:unless="${preference.isOptedIn}" class="badge bg-danger">Opted-Out</span>
+                        </td>
+                        <td> <!-- NEW ACTIONS COLUMN -->
+                            <!-- Edit button will be added here later -->
+                             <a th:href="@{/admin/customers/{customerId}/preferences/{preferenceId}/edit(customerId=${customer.id}, preferenceId=${preference.id})}"
+       class="btn btn-warning btn-sm">Edit</a>
+                            <form th:action="@{/admin/customers/{customerId}/preferences/{preferenceId}/delete(customerId=${customer.id}, preferenceId=${preference.id})}"
+                                method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this preference?')">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>

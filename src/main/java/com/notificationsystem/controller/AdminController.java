@@ -151,4 +151,34 @@ public class AdminController {
         
         return "redirect:/admin/customers/" + customerId;
     }
+
+    @PostMapping("/customers/{customerId}/preferences/{preferenceId}/delete")
+    public String deletePreference(@PathVariable Long customerId, @PathVariable Long preferenceId) {
+        customerService.deletePreference(preferenceId);
+        return "redirect:/admin/customers/" + customerId;
+    }
+
+    @GetMapping("/customers/{customerId}/preferences/{preferenceId}/edit")
+    public String showEditPreferenceForm(@PathVariable Long customerId,
+                                        @PathVariable Long preferenceId, Model model) {
+        
+        PreferenceDTO preference = customerService.findPreferenceById(preferenceId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid preference Id:" + preferenceId));
+
+        model.addAttribute("preference", preference);
+        model.addAttribute("customerId", customerId);
+        model.addAttribute("notificationTypes", NotificationType.values());
+        
+        return "edit-preference";
+    }
+
+    @PostMapping("/customers/{customerId}/preferences/{preferenceId}")
+    public String updatePreference(@PathVariable Long customerId,
+                                @PathVariable Long preferenceId,
+                                @ModelAttribute("preference") PreferenceDTO preferenceDTO) {
+                                    
+        customerService.updatePreference(preferenceId, preferenceDTO);
+        
+        return "redirect:/admin/customers/" + customerId;
+    }
 }
