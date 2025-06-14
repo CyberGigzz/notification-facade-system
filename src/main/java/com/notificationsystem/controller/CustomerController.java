@@ -35,7 +35,6 @@ public class CustomerController {
                 .orElse(ResponseEntity.notFound().build()); 
     }
 
-  
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService.findCustomerById(id)

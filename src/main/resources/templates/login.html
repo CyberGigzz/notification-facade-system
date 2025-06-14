@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle='Admin Login')}"></div>
+</head>
+<body class="bg-light">
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Admin Portal Login</h3>
+
+                    <!-- 
+                        This form POSTs to /login, which Spring Security handles automatically.
+                        We do NOT need to create a @PostMapping("/login") method in our controller.
+                    -->
+                    <form th:action="@{/login}" method="post">
+                        
+                        <!-- Login Error Message -->
+                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                            Invalid username or password.
+                        </div>
+
+                        <!-- Logout Success Message -->
+                        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                            You have been logged out.
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <!-- The 'name' attribute MUST be "username" for Spring Security -->
+                            <input type="text" class="form-control" id="username" name="username" required autofocus>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <!-- The 'name' attribute MUST be "password" for Spring Security -->
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
