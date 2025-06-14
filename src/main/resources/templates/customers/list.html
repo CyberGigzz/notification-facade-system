@@ -6,6 +6,10 @@
 <body>
 
 <div class="container mt-4">
+    <div th:if="${message}" th:classappend="'alert-' + ${messageType}" class="alert alert-dismissible fade show" role="alert">
+    <span th:text="${message}">Message text goes here!</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>  
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Customer List</h1>
         <a th:href="@{/admin/customers/new}" class="btn btn-primary">Add New Customer</a>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller 
 @RequestMapping("/admin/customers")
@@ -37,17 +38,22 @@ public class CustomerAdminController {
         return "customers/form";
     }
 
-    @PostMapping("")
-    public String saveCustomer(@ModelAttribute("customer") CustomerDTO customerDTO) {
-        
+    @PostMapping
+    public String saveCustomer(@ModelAttribute("customer") CustomerDTO customerDTO,
+                            RedirectAttributes redirectAttributes) {
         customerService.saveCustomer(customerDTO);
+        redirectAttributes.addFlashAttribute("message", "Customer saved successfully!");
+        redirectAttributes.addFlashAttribute("messageType", "success");
         
         return "redirect:/admin/customers";
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteCustomer(@PathVariable Long id) {        
+    public String deleteCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {        
         customerService.deleteCustomer(id);
+
+        redirectAttributes.addFlashAttribute("message", "Customer deleted successfully!");
+        redirectAttributes.addFlashAttribute("messageType", "danger");
         
         return "redirect:/admin/customers";
     }
