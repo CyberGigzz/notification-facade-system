@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- The header fragment remains the same -->
 <head th:fragment="header">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The th:text will be replaced by the title of the specific page -->
     <title th:text="${pageTitle}">Layout</title>
-    <!-- Link to our Bootstrap CSS file -->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
 
-<!-- This is a placeholder for the main content of each page -->
+      
+<header th:fragment="navbar" class="p-3 mb-3 border-bottom bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+            <a href="/admin/customers" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <h4>Notification Facade System</h4>
+            </a>
+            <!-- <div class="text-warning">
+                DEBUG: 
+                Principal: <span th:text="${#authentication?.name}"></span>
+            </div> -->
+
+            <!-- <div th:if="${#authentication != null and #authentication.isAuthenticated()}">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                </form>
+            </div> -->
+            <div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+    
+
+<!-- The content fragment remains the same -->
 <div th:fragment="content">
     <p>Page content goes here</p>
 </div>
 
-<!-- This footer fragment includes the Bootstrap JS -->
+
+<!-- The footer fragment remains the same -->
 <footer th:fragment="footer" class="text-center mt-4">
     <p>© 2025 Notification Facade System</p>
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
