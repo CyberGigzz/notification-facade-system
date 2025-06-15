@@ -18,6 +18,7 @@ public class CustomerDTO {
 
     @NotBlank(message = "Last name cannot be blank.")
     private String lastName;
+    
     private List<AddressDTO> addresses;
     private List<PreferenceDTO> preferences;
     private LocalDateTime createdAt;
