@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="customer : ${customers}">
+            <tr th:each="customer : ${customerPage.content}">
                 <td th:text="${customer.id}">1</td>
                 <td th:text="${customer.firstName}">Jane</td>
                 <td th:text="${customer.lastName}">Doe</td>
@@ -44,6 +44,40 @@
             </tr>
         </tbody>
     </table>
+    <!-- ============================================= -->
+    <!--           NEW: PAGINATION CONTROLS            -->
+    <!-- ============================================= -->
+    <nav th:if="${customerPage.totalPages > 1}" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+
+            <!-- 'Previous' Button -->
+            <li class="page-item" th:classappend="${customerPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/customers(page=${customerPage.number}, size=${customerPage.size}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">
+                    Previous
+                </a>
+            </li>
+
+            <!-- Page Number Links -->
+            <!-- We'll create a sequence of numbers from 1 to totalPages -->
+            <li th:each="pageNumber : ${#numbers.sequence(1, customerPage.totalPages)}"
+                class="page-item"
+                th:classappend="${pageNumber == customerPage.number + 1} ? 'active'">
+                <a class="page-link" th:href="@{/admin/customers(page=${pageNumber}, size=${customerPage.size}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}"
+                th:text="${pageNumber}">
+                </a>
+            </li>
+
+            <!-- 'Next' Button -->
+            <li class="page-item" th:classappend="${customerPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/customers(page=${customerPage.number + 2}, size=${customerPage.size}, sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">
+                    Next
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <!-- ============================================= -->
+
 </div>
 
 <div th:replace="~{layout :: footer}"></div>
