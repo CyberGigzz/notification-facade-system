@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle=${preference.id == null ? 'Add New Preference' : 'Edit Preference'})}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 th:text="${preference.id == null ? 'Add New Preference' : 'Edit Preference'}">Form Title</h2>
+
+    <!-- This single form handles both create and update -->
+    <form th:action="${preference.id == null} ? @{/admin/customers/{id}/preferences/create(id=${customerId})} : @{/admin/customers/{id}/preferences/{preferenceId}(id=${customerId}, preferenceId=${preference.id})}"
+          th:object="${preference}"
+          method="post">
+
+        <!-- Hidden ID field for updates -->
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Notification Type Dropdown -->
+        <div class="mb-3">
+            <label for="notificationType" class="form-label">Notification Type</label>
+            <select class="form-select" id="notificationType" th:field="*{notificationType}"
+                    th:classappend="${#fields.hasErrors('notificationType')} ? 'is-invalid' : ''"
+                    th:disabled="${preference.id != null}"> <!-- Disable if editing -->
+                <option value="">-- Select Type --</option>
+                <option th:each="type : ${notificationTypes}"
+                        th:value="${type}"
+                        th:text="${type}"></option>
+            </select>
+            <!-- Add a hidden input to submit the value of the disabled field during an edit -->
+            <input type="hidden" th:if="${preference.id != null}" th:field="*{notificationType}" />
+            <div th:if="${#fields.hasErrors('notificationType')}" th:errors="*{notificationType}" class="invalid-feedback"></div>
+        </div>
+
+        <!-- Opt-In Checkbox -->
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="isOptedIn" th:field="*{optedIn}">
+            <label class="form-check-label" for="isOptedIn">Opt-In to this notification type</label>
+        </div>
+
+        <button type="submit" class="btn btn-success"
+                th:text="${preference.id == null ? 'Save Preference' : 'Update Preference'}">Save</button>
+        <a th:href="@{/admin/customers/{id}(id=${customerId})}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>
