@@ -15,6 +15,9 @@
         
         <!-- Hidden ID field for updates -->
         <input type="hidden" th:field="*{id}" />
+        <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Global error message</p>
+        </div>
 
         <!-- Address Type Dropdown -->
         <div class="mb-3">

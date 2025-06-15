@@ -1,12 +1,14 @@
 package com.notificationsystem.dto;
 
 import com.notificationsystem.domain.enums.AddressType;
+import com.notificationsystem.validation.ValidAddress;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Data 
+@Data
+@ValidAddress(message = "The provided value is not a valid format for the selected address type.") // Apply it here
 public class AddressDTO {
 
     private Long id;
