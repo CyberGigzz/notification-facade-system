@@ -2,12 +2,15 @@ package com.notificationsystem.controller;
 
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.service.CustomerService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +41,19 @@ public class CustomerAdminController {
         return "customers/form";
     }
 
-    @PostMapping
-    public String saveCustomer(@ModelAttribute("customer") CustomerDTO customerDTO,
-                            RedirectAttributes redirectAttributes) {
+    @PostMapping("")
+    public String saveCustomer(@Valid @ModelAttribute("customer") CustomerDTO customerDTO,
+                            BindingResult bindingResult, 
+                            RedirectAttributes redirectAttributes
+                            ) {
+
+        if (bindingResult.hasErrors()) {
+            return "customers/form";
+        }
+
         customerService.saveCustomer(customerDTO);
         redirectAttributes.addFlashAttribute("message", "Customer saved successfully!");
         redirectAttributes.addFlashAttribute("messageType", "success");
-        
         return "redirect:/admin/customers";
     }
 
@@ -59,10 +68,20 @@ public class CustomerAdminController {
     }
 
     @PostMapping("/{id}")
-    public String updateCustomer(@PathVariable Long id, @ModelAttribute("customer") CustomerDTO customerDTO) {
-        customerDTO.setId(id);        
+    public String updateCustomer(@PathVariable Long id,
+                                @Valid @ModelAttribute("customer") CustomerDTO customerDTO,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "customers/form";
+        }
+
+        customerDTO.setId(id);
         customerService.saveCustomer(customerDTO);
-        
+        redirectAttributes.addFlashAttribute("message", "Customer updated successfully!");
+        redirectAttributes.addFlashAttribute("messageType", "success");
         return "redirect:/admin/customers";
     }
 

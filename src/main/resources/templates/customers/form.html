@@ -8,22 +8,49 @@
     <h2 th:text="${customer.id == null ? 'New Customer Details' : 'Edit Customer'}">Form Title</h2>
 
     <form th:action="${customer.id == null} ? @{/admin/customers} : @{/admin/customers/{id}(id=${customer.id})}" 
-      th:object="${customer}" 
-      method="post">
-        
+          th:object="${customer}" 
+          method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- First Name Field -->
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+            <input type="text"
+                   class="form-control"
+                   id="firstName"
+                   th:field="*{firstName}"
+                   th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"/>
+            <div th:if="${#fields.hasErrors('firstName')}"
+                 th:errors="*{firstName}"
+                 class="invalid-feedback">
+            </div>
         </div>
+
+        <!-- Last Name Field -->
         <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+            <input type="text"
+                   class="form-control"
+                   id="lastName"
+                   th:field="*{lastName}"
+                   th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"/>
+            <div th:if="${#fields.hasErrors('lastName')}"
+                 th:errors="*{lastName}"
+                 class="invalid-feedback">
+            </div>
         </div>
-        
-        <button type="submit" class="btn btn-success" th:text="${customer.id == null ? 'Save Customer' : 'Update Customer'}">Save</button>
+
+        <!-- Buttons -->
+        <button type="submit"
+                class="btn btn-success"
+                th:text="${customer.id == null ? 'Save Customer' : 'Update Customer'}">
+            Save
+        </button>
         <a th:href="@{/admin/customers}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
 <div th:replace="~{layout :: footer}"></div>
 </body>
 </html>
