@@ -4,14 +4,16 @@ import com.notificationsystem.dto.AddressDTO;
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.dto.PreferenceDTO;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
 
     CustomerDTO saveCustomer(CustomerDTO customerDTO);
 
-    List<CustomerDTO> findAllCustomers();
+    // List<CustomerDTO> findAllCustomers();
 
     Optional<CustomerDTO> findCustomerById(Long id);
 
@@ -32,4 +34,6 @@ public interface CustomerService {
     Optional<PreferenceDTO> findPreferenceById(Long preferenceId);
 
     void updatePreference(Long preferenceId, PreferenceDTO preferenceDTO);
+
+    Page<CustomerDTO> findAllCustomers(Pageable pageable);
 }

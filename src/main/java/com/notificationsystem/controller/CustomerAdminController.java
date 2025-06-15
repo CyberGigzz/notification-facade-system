@@ -1,13 +1,16 @@
 package com.notificationsystem.controller;
 
+import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.service.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller 
@@ -26,10 +30,27 @@ public class CustomerAdminController {
     private final CustomerService customerService;
 
     @GetMapping("")
-    public String showCustomerList(Model model) {
-        List<CustomerDTO> customers = customerService.findAllCustomers();
+    public String showCustomerList(
+            @RequestParam(defaultValue = "1") int page, 
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "asc") String sortDir, 
+            @RequestParam(defaultValue = "") String keyword, 
+            Model model) {
 
-        model.addAttribute("customers", customers);
+        Sort sort = Sort.by(sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortField);
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        Page<CustomerDTO> customerPage = customerService.findAllCustomers(pageable);
+
+        model.addAttribute("customerPage", customerPage);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("keyword", keyword);
+
+        model.addAttribute("allNotificationTypes", NotificationType.values());
 
         return "customers/list";
     }

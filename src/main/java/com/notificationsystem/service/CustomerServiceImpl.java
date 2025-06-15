@@ -11,10 +11,12 @@ import com.notificationsystem.repository.CustomerRepository;
 import com.notificationsystem.repository.PreferenceRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,12 +51,22 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    // @Override
+    // @Transactional(readOnly = true) 
+    // public List<CustomerDTO> findAllCustomers() {
+    //     return customerRepository.findAll().stream()
+    //             .map(this::convertToDTO)
+    //             .collect(Collectors.toList());
+    // }
+
     @Override
-    @Transactional(readOnly = true) 
-    public List<CustomerDTO> findAllCustomers() {
-        return customerRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<CustomerDTO> findAllCustomers(Pageable pageable) {
+
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        
+
+        return customerPage.map(this::convertToDTO);
     }
 
     @Override
