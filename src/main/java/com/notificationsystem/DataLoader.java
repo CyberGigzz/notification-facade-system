@@ -2,18 +2,23 @@ package com.notificationsystem;
 
 import com.notificationsystem.domain.Admin;
 import com.notificationsystem.domain.Customer;
+import com.notificationsystem.domain.NotificationLog;
 import com.notificationsystem.domain.Address;
 import com.notificationsystem.domain.Preference;
 import com.notificationsystem.domain.enums.AddressType;
+import com.notificationsystem.domain.enums.NotificationStatus;
 import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.repository.AdminRepository;
 import com.notificationsystem.repository.CustomerRepository;
+import com.notificationsystem.repository.NotificationLogRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +31,7 @@ public class DataLoader implements CommandLineRunner {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
+    private final NotificationLogRepository notificationLogRepository; // 1. Inject this repository
     private final Random random = new Random(); // Create a single Random instance
 
     @Override
@@ -40,6 +46,13 @@ public class DataLoader implements CommandLineRunner {
             log.info("Sample customer data seeded successfully.");
         } else {
             log.info("Customer data already exists. Skipping seeding.");
+        }
+
+        // 2. Add the check and call for notification logs
+        if (notificationLogRepository.count() == 0 && customerRepository.count() > 0) {
+            log.info("No notification logs found. Seeding sample log data...");
+            createSampleNotificationLogs();
+            log.info("Sample notification log data seeded successfully.");
         }
     }
 
@@ -93,7 +106,47 @@ public class DataLoader implements CommandLineRunner {
             customerRepository.save(customer);
         }
     }
-    
+
+    private void createSampleNotificationLogs() {
+        List<Customer> allCustomers = customerRepository.findAll();
+        if (allCustomers.isEmpty()) {
+            return; // Safety check
+        }
+
+        for (Customer customer : allCustomers) {
+            // For each customer, let's create 1 to 5 log entries
+            int logCount = 1 + random.nextInt(5);
+            for (int i = 0; i < logCount; i++) {
+                // Pick a random address from this customer's list of addresses
+                List<Address> addresses = customer.getAddresses();
+                if (addresses.isEmpty()) {
+                    continue; // Skip if customer has no addresses
+                }
+                Address randomAddress = addresses.get(random.nextInt(addresses.size()));
+
+                NotificationLog log = new NotificationLog();
+                log.setAddress(randomAddress);
+                
+                // Set a random time in the past few days
+                log.setSentAt(LocalDateTime.now().minusHours(random.nextInt(72)));
+
+                // Set a random status
+                int statusRoll = random.nextInt(100); // Roll a 100-sided die
+                if (statusRoll < 80) { // 80% chance of being DELIVERED
+                    log.setStatus(NotificationStatus.DELIVERED);
+                    log.setStatusDetails("Successfully delivered by provider.");
+                } else if (statusRoll < 95) { // 15% chance of being FAILED
+                    log.setStatus(NotificationStatus.FAILED);
+                    log.setStatusDetails("Carrier network error.");
+                } else { // 5% chance of being BOUNCED
+                    log.setStatus(NotificationStatus.BOUNCED);
+                    log.setStatusDetails("Mailbox does not exist.");
+                }
+                
+                notificationLogRepository.save(log);
+            }
+        }
+    }
     // Helper methods to reduce code duplication
     private void addAddress(Customer customer, AddressType type, String value) {
         Address address = new Address();
