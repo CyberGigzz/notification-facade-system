@@ -16,7 +16,7 @@ This project is a microservice designed to centralize and manage customer contac
 
 ## Technology Stack
 
-- **Backend:** Java 21, Spring Boot 3
+- **Backend:** Java 21, Spring Boot 3.5.0
 - **Data Persistence:** Spring Data JPA, Hibernate
 - **Database:** PostgreSQL (managed via Docker)
 - **Security:** Spring Security
@@ -34,7 +34,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 You will need the following software installed on your system:
 
 - **Java Development Kit (JDK) 21** or newer.
-- **Apache Maven** 3.6 or newer.
+- **Apache Maven** 3.6 or newer(Recommended).
 - **Docker** and **Docker Compose** (for running the PostgreSQL database).
 - A **Git** client.
 
@@ -64,10 +64,11 @@ PGADMIN_DEFAULT_PASSWORD=admin
 ```
 
 ### 3. Start the Database
+This application requires a running PostgreSQL database. You have two options:
 
-The required PostgreSQL database is managed via Docker Compose.
+### Option 1: Using Docker (Recommended)
 
-In the root directory of the project, run the following command to start the database container in the background:
+This is the easiest method. From the root directory, run the following command to start the self-contained database service:
 
 ```bash
 docker-compose up -d
@@ -76,6 +77,26 @@ docker-compose up -d
 The database will be available on localhost:5432.
 
 (Optional) You can use the pgAdmin database management tool by navigating to http://localhost:5050 in your web browser.
+
+### Option 2: Using a Local or External PostgreSQL Instance
+
+If you prefer not to use Docker, ensure you have a PostgreSQL instance running and configured to match the application's default settings.
+
+The application expects the following by default:
+
+    Database Name: notifications
+
+    Username: admin
+
+    Password: password
+
+If your local setup uses different credentials, you must update them in the `src/main/resources/application.properties` file:
+
+```properties
+spring.datasource.url=jdbc:postgresql://<your-host>:<your-port>/notifications
+spring.datasource.username=<your-username>
+spring.datasource.password=<your-password>
+```
 
 ## 4. Run the Application
 
