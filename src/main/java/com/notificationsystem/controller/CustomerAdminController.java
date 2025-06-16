@@ -3,6 +3,7 @@ package com.notificationsystem.controller;
 import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.dto.CustomerDTO;
 import com.notificationsystem.dto.NotificationLogDTO;
+import com.notificationsystem.exception.ResourceNotFoundException;
 import com.notificationsystem.service.CustomerService;
 import com.notificationsystem.service.NotificationTrackingService;
 
@@ -119,7 +120,7 @@ public class CustomerAdminController {
     @GetMapping("/{id}/edit")
     public String showEditCustomerForm(@PathVariable Long id, Model model) {
         CustomerDTO customer = customerService.findCustomerById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid customer Id:" + id));
 
         model.addAttribute("customer", customer);
 
@@ -132,7 +133,7 @@ public class CustomerAdminController {
             @RequestParam(defaultValue = "5") int size,
             Model model) {
         CustomerDTO customer = customerService.findCustomerById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid customer Id:" + id));
 
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<NotificationLogDTO> logPage = notificationTrackingService.findLogsByCustomerId(id, pageable);

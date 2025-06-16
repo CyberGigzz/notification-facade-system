@@ -2,6 +2,7 @@ package com.notificationsystem.controller;
 
 import com.notificationsystem.domain.enums.AddressType;
 import com.notificationsystem.dto.AddressDTO;
+import com.notificationsystem.exception.ResourceNotFoundException;
 import com.notificationsystem.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -47,7 +48,7 @@ public class AddressAdminController {
                                     @PathVariable Long addressId, Model model) {
         
         AddressDTO address = customerService.findAddressById(addressId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid address Id:" + addressId));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid address Id:" + addressId));
 
         model.addAttribute("address", address);
         model.addAttribute("customerId", customerId);

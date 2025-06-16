@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{layout :: header(pageTitle='Page Not Found')}"></div>
+</head>
+<body>
+
+<div class="container mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="display-1">404</h1>
+            <h2>Oops! Page Not Found.</h2>
+            <p class="lead">
+                The resource you are looking for does not exist. It might have been moved or deleted.
+            </p>
+            <p th:if="${message}" class="text-muted">
+                <em>Error details: <span th:text="${message}"></span></em>
+            </p>
+            <a th:href="@{/admin/dashboard}" class="btn btn-primary mt-3">Go to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

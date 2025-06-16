@@ -2,6 +2,7 @@ package com.notificationsystem.controller;
 
 import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.dto.PreferenceDTO;
+import com.notificationsystem.exception.ResourceNotFoundException;
 import com.notificationsystem.service.CustomerService;
 
 import jakarta.validation.Valid;
@@ -62,7 +63,7 @@ public class PreferenceAdminController {
     public String showEditPreferenceForm(@PathVariable Long customerId, @PathVariable Long preferenceId, Model model) {
         
         PreferenceDTO preference = customerService.findPreferenceById(preferenceId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid preference Id:" + preferenceId));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid preference Id:" + preferenceId));
 
         model.addAttribute("preference", preference);
         model.addAttribute("customerId", customerId);
