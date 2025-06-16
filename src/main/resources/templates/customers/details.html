@@ -102,6 +102,70 @@
             </table>
         </div>
     </div>
+
+    <!-- ============================================= -->
+    <!--         NEW: NOTIFICATION HISTORY CARD        -->
+    <!-- ============================================= -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>Notification History</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sent At</th>
+                        <th>To Address</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                      
+                <tbody th:if="${!logPage.empty}">
+                    <tr th:each="log : ${logPage.content}">
+                        <td th:text="${#temporals.format(log.sentAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${log.addressValue}"></td>
+                        <td>
+                            <span class="badge"
+                                th:classappend="${log.status.name() == 'DELIVERED'} ? 'bg-success' : 
+                                                (${log.status.name() == 'PENDING'} ? 'bg-warning' : 'bg-danger')"
+                                th:text="${log.status}">
+                            </span>
+                        </td>
+                        <td th:text="${log.statusDetails}"></td>
+                    </tr>
+                </tbody>
+
+                <!-- BLOCK 2: Show this body ONLY if the page IS empty -->
+                <tbody th:if="${logPage.empty}">
+                    <tr>
+                        <!-- Use colspan="4" to make this single cell span all 4 columns of the table -->
+                        <td colspan="4" class="text-center text-muted">
+                            No notification history found for this customer.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls for the Logs -->
+            <nav th:if="${logPage.totalPages > 1}" aria-label="Log page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${logPage.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/admin/customers/{id}(id=${customer.id}, page=${logPage.number})}">Previous</a>
+                    </li>
+                    <li th:each="pageNumber : ${#numbers.sequence(1, logPage.totalPages)}"
+                        class="page-item" th:classappend="${pageNumber == logPage.number + 1} ? 'active'">
+                        <a class="page-link" th:href="@{/admin/customers/{id}(id=${customer.id}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${logPage.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/admin/customers/{id}(id=${customer.id}, page=${logPage.number + 2})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
     
 </div>
 

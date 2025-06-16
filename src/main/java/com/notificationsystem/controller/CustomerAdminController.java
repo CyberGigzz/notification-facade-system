@@ -2,7 +2,9 @@ package com.notificationsystem.controller;
 
 import com.notificationsystem.domain.enums.NotificationType;
 import com.notificationsystem.dto.CustomerDTO;
+import com.notificationsystem.dto.NotificationLogDTO;
 import com.notificationsystem.service.CustomerService;
+import com.notificationsystem.service.NotificationTrackingService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CustomerAdminController {
     
     private final CustomerService customerService;
+    private final NotificationTrackingService notificationTrackingService;
 
     @GetMapping("")
     public String showCustomerList(
@@ -125,11 +128,20 @@ public class CustomerAdminController {
     }
 
     @GetMapping("/{id}")
-    public String showCustomerDetails(@PathVariable Long id, Model model) {
+    public String showCustomerDetails(@PathVariable Long id,
+            @RequestParam(defaultValue = "1") int page, 
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
         CustomerDTO customer = customerService.findCustomerById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
 
+        // 2. Fetch the paginated notification logs
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<NotificationLogDTO> logPage = notificationTrackingService.findLogsByCustomerId(id, pageable);
+
+        // 3. Add both the customer and the log page to the model
         model.addAttribute("customer", customer);
+        model.addAttribute("logPage", logPage);
 
         return "customers/details";
     }
