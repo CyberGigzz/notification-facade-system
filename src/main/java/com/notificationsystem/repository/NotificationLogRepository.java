@@ -2,6 +2,8 @@ package com.notificationsystem.repository;
 
 import com.notificationsystem.domain.NotificationLog;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +16,7 @@ public interface NotificationLogRepository extends JpaRepository<NotificationLog
 
     @Query("SELECT log FROM NotificationLog log WHERE log.address.customer.id = :customerId ORDER BY log.sentAt DESC")
     Page<NotificationLog> findByCustomerId(@Param("customerId") Long customerId, Pageable pageable);
+
+    @Query("SELECT log.status, COUNT(log.id) FROM NotificationLog log GROUP BY log.status")
+    List<Object[]> countByStatus();
 }

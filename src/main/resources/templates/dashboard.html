@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Use our standard layout header -->
+    <div th:replace="~{layout :: header(pageTitle='Reporting Dashboard')}"></div>
+</head>
+<body>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Dashboard</h1>
+    </div>
+    <div class="row">
+        
+        <!-- Card 1: Total Customers -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Customers</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${totalCustomers}">0</h2>
+                    <p class="card-text">Total number of customers currently in the system.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Marketing Email Opt-Ins -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Marketing Email Opt-Ins</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${emailOptedInCount}">0</h2>
+                    <p class="card-text">Customers who have opted-in to receive marketing emails.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Marketing Email Opt-Outs -->
+        <div class="col-md-4">
+            <div class="card text-dark bg-warning mb-3">
+                <div class="card-header">Marketing Email Opt-Outs</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${emailOptedOutCount}">0</h2>
+                    <p class="card-text">Customers who have opted-out of marketing emails.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Marketing SMS Opt-Ins</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${smsOptedInCount}">0</h2>
+                    <p class="card-text">Customers who have opted-in to receive marketing via SMS.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Notifications Delivered -->
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">Notifications Delivered</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${deliveredCount}">0</h2>
+                    <p class="card-text">Total notifications successfully delivered across all channels.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Notifications Failed -->
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Notifications Failed</div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${failedCount}">0</h2>
+                    <p class="card-text">Total notifications that failed to deliver (including bounces).</p>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End of row -->
+
+    <!-- You can add more rows of cards for other statistics here later -->
+    <!-- For example, a row for SMS stats or notification delivery rates -->
+
+</div>
+
+<!-- Use our standard layout footer -->
+<div th:replace="~{layout :: footer}"></div>
+</body>
+</html>

@@ -14,19 +14,23 @@
 <header th:fragment="navbar" class="p-3 mb-3 border-bottom bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-between">
-            <a href="/admin/customers" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <!-- <a href="/admin/customers" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                 <h4>Notification Facade System</h4>
-            </a>
-            <!-- <div class="text-warning">
-                DEBUG: 
-                Principal: <span th:text="${#authentication?.name}"></span>
-            </div> -->
-
-            <!-- <div th:if="${#authentication != null and #authentication.isAuthenticated()}">
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="btn btn-outline-light">Logout</button>
-                </form>
-            </div> -->
+            </a> -->
+            <div class="d-flex align-items-center">
+                <a href="/admin/customers" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-4">
+                    <h4>Notification Facade System</h4>
+                </a>
+                
+                <!-- ======================= -->
+                <!--    NEW NAV LINKS        -->
+                <!-- ======================= -->
+                <ul class="nav">
+                    <li><a th:href="@{/admin/dashboard}" class="nav-link px-2 text-white">Dashboard</a></li>
+                    <li><a th:href="@{/admin/customers}" class="nav-link px-2 text-white">Customers</a></li>
+                </ul>
+                <!-- ======================= -->
+            </div>
             <div th:if="${#authentication != null and #authentication.name != 'anonymousUser'}">
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-light">Logout</button>
