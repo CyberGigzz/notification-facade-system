@@ -52,7 +52,6 @@ public class CustomerAdminController {
 
         model.addAttribute("customerPage", customerPage);
         
-        // Pass all parameters back to the view
         model.addAttribute("keyword", keyword);
         model.addAttribute("notificationType", notificationType);
         model.addAttribute("optedInStatus", optedInStatus);
@@ -135,11 +134,9 @@ public class CustomerAdminController {
         CustomerDTO customer = customerService.findCustomerById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid customer Id:" + id));
 
-        // 2. Fetch the paginated notification logs
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<NotificationLogDTO> logPage = notificationTrackingService.findLogsByCustomerId(id, pageable);
 
-        // 3. Add both the customer and the log page to the model
         model.addAttribute("customer", customer);
         model.addAttribute("logPage", logPage);
 

@@ -103,9 +103,7 @@
         </div>
     </div>
 
-    <!-- ============================================= -->
-    <!--         NEW: NOTIFICATION HISTORY CARD        -->
-    <!-- ============================================= -->
+
     <div class="card mt-4">
         <div class="card-header">
             <h4>Notification History</h4>
@@ -136,10 +134,8 @@
                     </tr>
                 </tbody>
 
-                <!-- BLOCK 2: Show this body ONLY if the page IS empty -->
                 <tbody th:if="${logPage.empty}">
                     <tr>
-                        <!-- Use colspan="4" to make this single cell span all 4 columns of the table -->
                         <td colspan="4" class="text-center text-muted">
                             No notification history found for this customer.
                         </td>

@@ -7,7 +7,6 @@
 <body class="bg-light">
 
 
-<!-- This is the ONLY container block you should have -->
 <div class="container">
     <div class="row justify-content-center align-items-center" style="height: 100vh;">
         <div class="col-md-5">
@@ -17,12 +16,10 @@
 
                     <form th:action="@{/login}" method="post">
                         
-                        <!-- Login Error Message -->
                         <div th:if="${param.error}" class="alert alert-danger" role="alert">
                             Invalid username or password.
                         </div>
 
-                        <!-- Logout Success Message -->
                         <div th:if="${param.logout}" class="alert alert-success" role="alert">
                             You have been logged out.
                         </div>
@@ -47,7 +44,6 @@
     </div>
 </div>
 
-<!-- The script tag remains here -->
 <script th:if="${param.logout}">
     if (window.history.replaceState) {
         const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;

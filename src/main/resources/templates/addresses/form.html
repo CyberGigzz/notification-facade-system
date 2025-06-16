@@ -8,24 +8,20 @@
 <div class="container mt-4">
     <h2 th:text="${address.id == null ? 'Add New Address' : 'Edit Address'}">Form Title</h2>
 
-    <!-- This single form handles both create and update -->
     <form th:action="${address.id == null} ? @{/admin/customers/{id}/addresses/create(id=${customerId})} : @{/admin/customers/{id}/addresses/{addressId}(id=${customerId}, addressId=${address.id})}"
           th:object="${address}"
           method="post">
         
-        <!-- Hidden ID field for updates -->
         <input type="hidden" th:field="*{id}" />
         <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
             <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Global error message</p>
         </div>
 
-        <!-- Address Type Dropdown -->
         <div class="mb-3">
             <label for="addressType" class="form-label">Address Type</label>
             <select class="form-select" id="addressType" th:field="*{addressType}"
                     th:classappend="${#fields.hasErrors('addressType')} ? 'is-invalid' : ''">
                 <option value="">-- Select Type --</option>
-                <!-- This loop populates the dropdown options -->
                 <option th:each="type : ${addressTypes}"
                         th:value="${type}"
                         th:text="${type}"></option>
@@ -33,7 +29,6 @@
             <div th:if="${#fields.hasErrors('addressType')}" th:errors="*{addressType}" class="invalid-feedback"></div>
         </div>
 
-        <!-- Value Input -->
         <div class="mb-3">
             <label for="value" class="form-label">Value</label>
             <input type="text" class="form-control" id="value" th:field="*{value}"

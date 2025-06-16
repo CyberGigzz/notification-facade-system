@@ -22,16 +22,14 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<Page<CustomerDTO>> getAllCustomers(
-            @RequestParam(defaultValue = "0") int page, // API pages are often 0-indexed by convention
+            @RequestParam(defaultValue = "0") int page, 
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "id,asc") String[] sort) { // Allow multi-field sort, e.g., sort=lastName,asc&sort=firstName,desc
+            @RequestParam(defaultValue = "id,asc") String[] sort) { 
 
-        // --- Logic to parse the sort parameter ---
         String sortField = sort[0];
         String sortDirection = sort.length > 1 ? sort[1] : "asc";
         Sort.Direction direction = sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sortOrder = Sort.by(direction, sortField);
-        // --- End of sort logic ---
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 

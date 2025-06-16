@@ -30,21 +30,18 @@ public class ReportingServiceImpl implements ReportingService {
     @Override
     @Transactional(readOnly = true)
     public Map<Boolean, Long> getCustomerCountByEmailOptInStatus() {
-        // Call our new repository method
         List<Object[]> results = preferenceRepository.countByOptInStatusForType(NotificationType.MARKETING_EMAIL);
 
-        // Convert the List<Object[]> into a clean Map<Boolean, Long>
         return results.stream()
                 .collect(Collectors.toMap(
-                        result -> (Boolean) result[0], // The first element is the boolean status
-                        result -> (Long) result[1]      // The second element is the count
+                        result -> (Boolean) result[0], 
+                        result -> (Long) result[1]     
                 ));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Map<Boolean, Long> getCustomerCountBySmsOptInStatus() {
-        // We reuse the exact same repository method, just with a different parameter.
         List<Object[]> results = preferenceRepository.countByOptInStatusForType(NotificationType.MARKETING_SMS);
         return results.stream()
                 .collect(Collectors.toMap(
@@ -53,12 +50,10 @@ public class ReportingServiceImpl implements ReportingService {
                 ));
     }
 
-    // 3. Implement notification status method
     @Override
     @Transactional(readOnly = true)
     public Map<String, Long> getNotificationCountByStatus() {
         List<Object[]> results = notificationLogRepository.countByStatus();
-        // The status is an Enum, so we convert it to its String name for the map key.
         return results.stream()
                 .collect(Collectors.toMap(
                         result -> ((NotificationStatus) result[0]).name(),

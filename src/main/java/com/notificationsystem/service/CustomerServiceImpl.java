@@ -165,12 +165,10 @@ public class CustomerServiceImpl implements CustomerService {
         newPreference.setNotificationType(preferenceDTO.getNotificationType());
         newPreference.setOptedIn(preferenceDTO.isOptedIn());
         
-        // Set the relationship
         newPreference.setCustomer(customer);
         
         customer.getPreferences().add(newPreference);
 
-        // Saving the parent will cascade and save the new preference
         customerRepository.save(customer);
     }
 

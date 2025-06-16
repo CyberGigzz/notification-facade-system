@@ -31,8 +31,8 @@ public class DataLoader implements CommandLineRunner {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
-    private final NotificationLogRepository notificationLogRepository; // 1. Inject this repository
-    private final Random random = new Random(); // Create a single Random instance
+    private final NotificationLogRepository notificationLogRepository; 
+    private final Random random = new Random(); 
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,7 +48,6 @@ public class DataLoader implements CommandLineRunner {
             log.info("Customer data already exists. Skipping seeding.");
         }
 
-        // 2. Add the check and call for notification logs
         if (notificationLogRepository.count() == 0 && customerRepository.count() > 0) {
             log.info("No notification logs found. Seeding sample log data...");
             createSampleNotificationLogs();
@@ -57,7 +56,6 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createInitialAdminUser() {
-        // ... same admin creation logic ...
         log.info("No admins found in the database. Creating initial admin user...");
         String adminPassword = "password";
         String hashedPassword = passwordEncoder.encode(adminPassword);
@@ -71,12 +69,10 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createSampleCustomers() {
-        // Expanded lists for more variety
         List<String> firstNames = Arrays.asList("John", "Jane", "Peter", "Mary", "David", "Susan", "Michael", "Linda", "James", "Patricia", "Robert", "Jennifer", "William", "Elizabeth", "Richard", "Maria", "Charles", "Nancy", "Joseph", "Karen");
         List<String> lastNames = Arrays.asList("Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "White");
 
         for (int i = 0; i < 50; i++) { // Let's create 50 customers
-            // Use Random to pick names, creating more unique combinations
             String firstName = firstNames.get(random.nextInt(firstNames.size()));
             String lastName = lastNames.get(random.nextInt(lastNames.size()));
             String email = (firstName + "." + lastName).toLowerCase() + i + "@example.com";
@@ -85,18 +81,15 @@ public class DataLoader implements CommandLineRunner {
             customer.setFirstName(firstName);
             customer.setLastName(lastName);
 
-            // Add an email address for every customer
             addAddress(customer, AddressType.EMAIL, email);
 
-            // Add an SMS address for roughly half of the customers
             if (random.nextBoolean()) {
                 String phone = "+1555" + String.format("%07d", random.nextInt(10000000));
                 addAddress(customer, AddressType.SMS, phone);
             }
 
-            // Add some preferences with random opt-in status
             addPreference(customer, NotificationType.MARKETING_EMAIL, random.nextBoolean());
-            addPreference(customer, NotificationType.TRANSACTIONAL_EMAIL, true); // Transactional are usually always on
+            addPreference(customer, NotificationType.TRANSACTIONAL_EMAIL, true); 
 
             if (customer.getAddresses().stream().anyMatch(a -> a.getAddressType() == AddressType.SMS)) {
                 addPreference(customer, NotificationType.MARKETING_SMS, random.nextBoolean());
@@ -108,37 +101,33 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createSampleNotificationLogs() {
-        List<Customer> allCustomers = customerRepository.findAll();
+        List<Customer> allCustomers = customerRepository.findAllWithAddresses();
         if (allCustomers.isEmpty()) {
-            return; // Safety check
+            return; 
         }
 
         for (Customer customer : allCustomers) {
-            // For each customer, let's create 1 to 5 log entries
             int logCount = 1 + random.nextInt(5);
             for (int i = 0; i < logCount; i++) {
-                // Pick a random address from this customer's list of addresses
                 List<Address> addresses = customer.getAddresses();
                 if (addresses.isEmpty()) {
-                    continue; // Skip if customer has no addresses
+                    continue;
                 }
                 Address randomAddress = addresses.get(random.nextInt(addresses.size()));
 
                 NotificationLog log = new NotificationLog();
                 log.setAddress(randomAddress);
                 
-                // Set a random time in the past few days
                 log.setSentAt(LocalDateTime.now().minusHours(random.nextInt(72)));
 
-                // Set a random status
-                int statusRoll = random.nextInt(100); // Roll a 100-sided die
-                if (statusRoll < 80) { // 80% chance of being DELIVERED
+                int statusRoll = random.nextInt(100); 
+                if (statusRoll < 80) { 
                     log.setStatus(NotificationStatus.DELIVERED);
                     log.setStatusDetails("Successfully delivered by provider.");
-                } else if (statusRoll < 95) { // 15% chance of being FAILED
+                } else if (statusRoll < 95) { 
                     log.setStatus(NotificationStatus.FAILED);
                     log.setStatusDetails("Carrier network error.");
-                } else { // 5% chance of being BOUNCED
+                } else { 
                     log.setStatus(NotificationStatus.BOUNCED);
                     log.setStatusDetails("Mailbox does not exist.");
                 }
@@ -147,7 +136,7 @@ public class DataLoader implements CommandLineRunner {
             }
         }
     }
-    // Helper methods to reduce code duplication
+
     private void addAddress(Customer customer, AddressType type, String value) {
         Address address = new Address();
         address.setAddressType(type);

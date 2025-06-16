@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-@ValidAddress(message = "The provided value is not a valid format for the selected address type.") // Apply it here
+@ValidAddress(message = "The provided value is not a valid format for the selected address type.") 
 public class AddressDTO {
 
     private Long id;

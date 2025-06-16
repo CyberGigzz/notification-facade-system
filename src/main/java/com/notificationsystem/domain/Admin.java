@@ -9,19 +9,19 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "admins") // Good practice to name tables in plural
+@Table(name = "admins") 
 public class Admin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incrementing ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
-    private String password; // This will be stored as a hash, not plain text
+    private String password; 
 
     @Column(nullable = false)
-    private String role; // e.g., "ROLE_ADMIN"
+    private String role; 
 }

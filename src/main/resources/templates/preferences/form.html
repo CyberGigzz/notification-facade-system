@@ -8,7 +8,6 @@
 <div class="container mt-4">
     <h2 th:text="${preference.id == null ? 'Add New Preference' : 'Edit Preference'}">Form Title</h2>
 
-    <!-- This single form handles both create and update -->
     <form th:action="${preference.id == null} ? @{/admin/customers/{id}/preferences/create(id=${customerId})} : @{/admin/customers/{id}/preferences/{preferenceId}(id=${customerId}, preferenceId=${preference.id})}"
           th:object="${preference}"
           method="post">
@@ -27,7 +26,6 @@
                         th:value="${type}"
                         th:text="${type}"></option>
             </select>
-            <!-- Add a hidden input to submit the value of the disabled field during an edit -->
             <input type="hidden" th:if="${preference.id != null}" th:field="*{notificationType}" />
             <div th:if="${#fields.hasErrors('notificationType')}" th:errors="*{notificationType}" class="invalid-feedback"></div>
         </div>

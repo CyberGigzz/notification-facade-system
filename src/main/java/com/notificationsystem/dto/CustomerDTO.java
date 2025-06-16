@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 public class CustomerDTO {
     private Long id;
 
-    @NotEmpty(message = "First name cannot be empty.") // The validation rule
+    @NotEmpty(message = "First name cannot be empty.") 
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters.")
     private String firstName;
 

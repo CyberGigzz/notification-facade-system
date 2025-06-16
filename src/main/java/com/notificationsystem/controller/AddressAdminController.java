@@ -56,7 +56,7 @@ public class AddressAdminController {
         return "addresses/form";
     }
 
-    @PostMapping("/create") // Explicit URL for creating
+    @PostMapping("/create") 
     public String saveAddress(@PathVariable Long customerId,
                               @Valid @ModelAttribute("address") AddressDTO addressDTO,
                               BindingResult bindingResult,
@@ -72,7 +72,7 @@ public class AddressAdminController {
         return "redirect:/admin/customers/" + customerId;
     }
 
-    @PostMapping("/{addressId}") // URL for updating
+    @PostMapping("/{addressId}") 
     public String updateAddress(@PathVariable Long customerId, @PathVariable Long addressId,
                                 @Valid @ModelAttribute("address") AddressDTO addressDTO,
                                 BindingResult bindingResult,

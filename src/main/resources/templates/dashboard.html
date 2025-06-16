@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Use our standard layout header -->
     <div th:replace="~{layout :: header(pageTitle='Reporting Dashboard')}"></div>
 </head>
 <body>
@@ -12,7 +11,6 @@
     </div>
     <div class="row">
         
-        <!-- Card 1: Total Customers -->
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">Total Customers</div>
@@ -23,7 +21,6 @@
             </div>
         </div>
 
-        <!-- Card 2: Marketing Email Opt-Ins -->
         <div class="col-md-4">
             <div class="card text-white bg-success mb-3">
                 <div class="card-header">Marketing Email Opt-Ins</div>
@@ -34,7 +31,6 @@
             </div>
         </div>
 
-        <!-- Card 3: Marketing Email Opt-Outs -->
         <div class="col-md-4">
             <div class="card text-dark bg-warning mb-3">
                 <div class="card-header">Marketing Email Opt-Outs</div>
@@ -55,7 +51,6 @@
             </div>
         </div>
 
-        <!-- Card 5: Notifications Delivered -->
         <div class="col-md-4">
             <div class="card text-white bg-secondary mb-3">
                 <div class="card-header">Notifications Delivered</div>
@@ -66,7 +61,6 @@
             </div>
         </div>
 
-        <!-- Card 6: Notifications Failed -->
         <div class="col-md-4">
             <div class="card text-white bg-danger mb-3">
                 <div class="card-header">Notifications Failed</div>
@@ -77,14 +71,11 @@
             </div>
         </div>
 
-    </div> <!-- End of row -->
+    </div> 
 
-    <!-- You can add more rows of cards for other statistics here later -->
-    <!-- For example, a row for SMS stats or notification delivery rates -->
 
 </div>
 
-<!-- Use our standard layout footer -->
 <div th:replace="~{layout :: footer}"></div>
 </body>
 </html>
