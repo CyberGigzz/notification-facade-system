@@ -51,14 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    // @Override
-    // @Transactional(readOnly = true) 
-    // public List<CustomerDTO> findAllCustomers() {
-    //     return customerRepository.findAll().stream()
-    //             .map(this::convertToDTO)
-    //             .collect(Collectors.toList());
-    // }
-
     @Override
     @Transactional(readOnly = true)
     public Page<CustomerDTO> findAllCustomers(Pageable pageable) {
@@ -206,5 +198,11 @@ public class CustomerServiceImpl implements CustomerService {
         existingPreference.setOptedIn(preferenceDTO.isOptedIn());
 
         preferenceRepository.save(existingPreference);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CustomerDTO> searchAndFilterCustomers(String keyword, String notificationType, Boolean optedInStatus, Pageable pageable) {
+        return customerRepository.findByCriteria(keyword, notificationType, optedInStatus, pageable);
     }
 }

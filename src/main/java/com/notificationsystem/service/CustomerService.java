@@ -13,8 +13,6 @@ public interface CustomerService {
 
     CustomerDTO saveCustomer(CustomerDTO customerDTO);
 
-    // List<CustomerDTO> findAllCustomers();
-
     Optional<CustomerDTO> findCustomerById(Long id);
 
     void deleteCustomer(Long id);
@@ -36,4 +34,6 @@ public interface CustomerService {
     void updatePreference(Long preferenceId, PreferenceDTO preferenceDTO);
 
     Page<CustomerDTO> findAllCustomers(Pageable pageable);
+
+    Page<CustomerDTO> searchAndFilterCustomers(String keyword, String notificationType, Boolean optedInStatus, Pageable pageable);
 }

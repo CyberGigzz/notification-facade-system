@@ -31,25 +31,33 @@ public class CustomerAdminController {
 
     @GetMapping("")
     public String showCustomerList(
-            @RequestParam(defaultValue = "1") int page, 
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String notificationType,
+            @RequestParam(required = false) String optedInStatus,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortField,
-            @RequestParam(defaultValue = "asc") String sortDir, 
-            @RequestParam(defaultValue = "") String keyword, 
+            @RequestParam(defaultValue = "asc") String sortDir,
             Model model) {
 
         Sort sort = Sort.by(sortDir.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortField);
-
         Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-        Page<CustomerDTO> customerPage = customerService.findAllCustomers(pageable);
+        Boolean optedIn = (optedInStatus == null || optedInStatus.isEmpty()) ? null : Boolean.parseBoolean(optedInStatus);
+
+        Page<CustomerDTO> customerPage = customerService.searchAndFilterCustomers(keyword, notificationType, optedIn, pageable);
 
         model.addAttribute("customerPage", customerPage);
-
+        
+        // Pass all parameters back to the view
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("notificationType", notificationType);
+        model.addAttribute("optedInStatus", optedInStatus);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("keyword", keyword);
-
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        
         model.addAttribute("allNotificationTypes", NotificationType.values());
 
         return "customers/list";
