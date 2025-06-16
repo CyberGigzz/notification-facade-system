@@ -47,10 +47,12 @@ git clone git@github.com:CyberGigzz/notification-facade-system.git
 cd notification-facade-system
 ```
     
-### 2. Configure Environment Variables
-This project uses a .env file to manage database credentials. This file is not checked into version control, so you must create it yourself.
+### 2. Environment Configuration
+To streamline the setup process, this project includes a pre-configured .env file in the root directory.
 
-In the root directory of the project, create a file named .env with the following content:
+For the purpose of this local development and testing environment, I have intentionally committed the .env file directly into the repository. This allows you to get the project running immediately after cloning, without the need to manually create any configuration files.
+
+The default credentials used by the application and the docker-compose setup are:
 
 ```bash
 # PostgreSQL Credentials
